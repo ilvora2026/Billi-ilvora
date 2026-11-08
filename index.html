@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ILVORA Billing System — Prototype</title>
+<style>
+:root{--navy:#102b46;--navy2:#173e5d;--teal:#168b87;--gold:#c9a96e;--bg:#f3f6f8;--ink:#203344;--muted:#718096;--line:#e3e9ee;--white:#fff;--red:#c65353;--green:#23845e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;background:var(--navy);color:white;font-weight:600}button.secondary{background:#edf2f6;color:var(--navy)}button.teal{background:var(--teal)}button.danger{background:#fff0f0;color:var(--red)}button:disabled{opacity:.45;cursor:not-allowed}
+.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}.sidebar{background:var(--navy);color:white;padding:22px 15px;display:flex;flex-direction:column;gap:20px}.brand{display:flex;align-items:center;gap:11px;padding:0 9px 18px;border-bottom:1px solid #ffffff25}.logo{width:42px;height:42px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-size:23px}.brand b{font-size:20px;letter-spacing:2px}.brand small{display:block;color:#b8c8d4;font-size:9px;letter-spacing:1.2px}.navlabel{font-size:10px;color:#91a7b8;letter-spacing:1.4px;padding:0 10px}.nav button{display:flex;width:100%;text-align:left;gap:12px;align-items:center;background:transparent;color:#d8e3eb;padding:11px 12px;margin:3px 0;font-weight:500}.nav button.active,.nav button:hover{background:#ffffff18;color:white}.nav .ico{width:18px;text-align:center}.sidefoot{margin-top:auto;padding:12px;color:#9fb3c2;font-size:11px;border-top:1px solid #ffffff25}
+main{min-width:0}.topbar{height:70px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:15px}.topbar .right{display:flex;align-items:center;gap:12px}.topbar select{max-width:240px}.user{display:flex;align-items:center;gap:9px}.avatar{width:34px;height:34px;border-radius:50%;background:#e4f1ef;color:var(--teal);display:grid;place-items:center;font-weight:700}.content{padding:26px 28px;max-width:1500px;margin:auto}.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:22px}.pagehead h1{margin:0;font-size:25px;color:var(--navy)}.pagehead p{margin:4px 0;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.card,.panel{background:white;border:1px solid var(--line);border-radius:13px;padding:17px}.metric{font-size:25px;font-weight:750;color:var(--navy);margin-top:5px}.muted{color:var(--muted)}.small{font-size:12px}.metricrow{display:flex;justify-content:space-between;align-items:center}.metricicon{width:36px;height:36px;border-radius:10px;background:#eaf3f4;display:grid;place-items:center;color:var(--teal);font-size:17px}.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}.panel h3{margin:0 0 15px;color:var(--navy);font-size:16px}.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}.toolbar input{max-width:270px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.field label{font-size:12px;font-weight:650;color:#536779}.field input,.field select,.field textarea,input,select{border:1px solid #d8e1e8;border-radius:8px;padding:10px 11px;background:white;color:var(--ink);min-width:0}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 13px}.formgrid .wide{grid-column:1/-1}table{width:100%;border-collapse:collapse}th{text-align:left;color:#718096;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:#f8fafb}td,th{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}td{font-size:13px}tr:last-child td{border-bottom:0}.pill{display:inline-block;border-radius:30px;padding:4px 9px;font-size:11px;font-weight:650;background:#eaf6ef;color:var(--green)}.pill.pending{background:#fff5df;color:#986b14}.pill.cancel{background:#fff0f0;color:var(--red)}.actions{display:flex;gap:7px;flex-wrap:wrap}.hidden{display:none!important}.bill-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.8fr);gap:16px}.itemrow{display:grid;grid-template-columns:2fr .7fr .8fr 38px;gap:8px;align-items:center;margin-bottom:8px}.itemrow input{width:100%}.totals{margin-left:auto;max-width:320px}.totalrow{display:flex;justify-content:space-between;padding:6px 0}.totalrow.grand{border-top:1px solid var(--line);font-weight:800;font-size:18px;color:var(--navy);margin-top:5px;padding-top:12px}.receipt{max-width:720px;margin:auto;border:1px solid var(--line);padding:28px;background:white}.receipthead{text-align:center;border-bottom:2px solid var(--navy);padding-bottom:14px;margin-bottom:15px}.receipthead h2{letter-spacing:2px;color:var(--navy);margin:0}.receiptmeta{display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;font-size:13px;margin-bottom:18px}.notice{background:#fff8e8;border:1px solid #f0dfb7;color:#775b20;padding:12px;border-radius:9px;font-size:12px;margin-bottom:16px}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}.tabs button{background:#edf2f6;color:var(--navy)}.tabs button.active{background:var(--navy);color:white}.mobilemenu{display:none}.empty{text-align:center;padding:35px;color:var(--muted)}.rightalign{text-align:right}.footnote{font-size:11px;color:var(--muted);margin-top:12px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.sidebar.open{display:flex;position:fixed;z-index:5;inset:0 auto 0 0;width:260px}.mobilemenu{display:inline-block}.cards{grid-template-columns:repeat(2,1fr)}.grid2,.bill-layout{grid-template-columns:1fr}.content{padding:18px}.topbar{padding:0 16px}.topbar .branchlabel{display:none}}
+@media(max-width:560px){.cards{grid-template-columns:1fr 1fr;gap:8px}.card{padding:12px}.metric{font-size:20px}.pagehead{flex-direction:column}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.topbar{height:62px}.topbar select{max-width:145px}.user span{display:none}.content{padding:14px}.itemrow{grid-template-columns:1.5fr .55fr .7fr 32px;gap:5px}.itemrow input{padding:8px 5px;font-size:12px}td,th{padding:9px 6px;font-size:11px}}
+@media print{body{background:white}.sidebar,.topbar,.no-print,.pagehead{display:none!important}.app{display:block}.content{padding:0;max-width:none}.receipt{border:0;max-width:none;padding:10mm}.receipthead h2{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+ <div class="brand"><div class="logo">✚</div><div><b>ILVORA</b><small>HEALTHCARE GROUP</small></div></div>
+ <div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav">
+ <button class="active" data-page="dashboard"><span class="ico">▦</span>Dashboard</button>
+ <button data-page="billing"><span class="ico">▤</span>New bill</button>
+ <button data-page="patients"><span class="ico">♙</span>Patients</button>
+ <button data-page="bills"><span class="ico">▧</span>Bill register</button>
+ <button data-page="services"><span class="ico">☷</span>Services & rates</button>
+ <button data-page="branches"><span class="ico">⌂</span>Branches</button>
+ <button data-page="reports"><span class="ico">▥</span>Reports</button>
+ <button data-page="users"><span class="ico">♧</span>Users & roles</button>
+ </nav></div>
+ <div class="sidefoot">ILVORA Billing • Prototype v0.1<br>Demo data stored in this browser only</div>
+</aside>
+<main>
+<header class="topbar">
+ <div style="display:flex;align-items:center;gap:12px"><button class="mobilemenu secondary" id="menuBtn">☰</button><div><b id="topTitle">Dashboard</b><div class="small muted branchlabel">Billing & revenue management</div></div></div>
+ <div class="right"><select id="branchSelect" aria-label="Active branch"><option value="Kochi Head Office">Kochi Head Office</option><option value="ILVORA Health Clinic – Kottarakkara">ILVORA Health Clinic – Kottarakkara</option><option value="Neelambari Hospital – Thamarakulam">Neelambari Hospital – Thamarakulam</option></select><select id="roleSelect" aria-label="Demo role"><option value="Head Office Admin">Head Office Admin</option><option value="Branch Admin">Branch Admin</option><option value="Billing Staff">Billing Staff</option><option value="Auditor">Auditor</option></select><div class="user"><div class="avatar">BK</div><span class="small">Demo User</span></div></div>
+</header>
+<div class="content"><div class="notice"><b>DEMO MODE:</b> This GitHub Pages prototype stores data in this browser only. It has no real authentication, shared database, or production security. Use fictional data only.</div>
+<section id="page-dashboard">
+ <div class="pagehead"><div><h1>Good afternoon</h1><p>Here is your billing overview for the selected branch.</p></div><button onclick="showPage('billing')">＋ Create new bill</button></div>
+ <div class="cards">
+  <div class="card"><div class="metricrow"><span class="muted small">Today's collection</span><span class="metricicon">₹</span></div><div class="metric" id="dashCollection">₹0</div><div class="small muted">Paid bills</div></div>
+  <div class="card"><div class="metricrow"><span class="muted small">Bills generated</span><span class="metricicon">▤</span></div><div class="metric" id="dashBills">0</div><div class="small muted">Selected branch</div></div>
+  <div class="card"><div class="metricrow"><span class="muted small">Outstanding</span><span class="metricicon">◷</span></div><div class="metric" id="dashDue">₹0</div><div class="small muted">Unpaid balance</div></div>
+  <div class="card"><div class="metricrow"><span class="muted small">Registered patients</span><span class="metricicon">♙</span></div><div class="metric" id="dashPatients">0</div><div class="small muted">Demo register</div></div>
+ </div>
+ <div class="grid2"><div class="panel"><div class="toolbar"><h3>Recent bills</h3><button class="secondary" onclick="showPage('bills')">View register</button></div><div id="recentBills"></div></div>
+ <div class="panel"><h3>Quick actions</h3><div class="actions" style="flex-direction:column;align-items:stretch"><button class="teal" onclick="showPage('billing')">＋ Create patient bill</button><button class="secondary" onclick="showPage('patients')">♙ Register patient</button><button class="secondary" onclick="showPage('reports')">▥ View collection report</button></div><div class="notice" style="margin-top:18px">Prototype notice: sample rates and tax settings are placeholders. Confirm applicable GST, exemptions and statutory requirements with your accountant before live use.</div></div></div>
+</section>
+<section id="page-billing" class="hidden">
+ <div class="pagehead"><div><h1>Create new bill</h1><p>Generate an itemised bill and printable receipt.</p></div><span class="pill">New transaction</span></div>
+ <div class="bill-layout">
+ <div class="panel">
+  <h3>Patient & encounter details</h3>
+  <div class="formgrid">
+   <div class="field"><label>Patient</label><select id="billPatient"></select></div>
+   <div class="field"><label>Patient ID</label><input id="billPatientId" readonly placeholder="Auto-filled"></div>
+   <div class="field"><label>Department / service area</label><select id="department"><option>OPD</option><option>Emergency</option><option>IPD</option><option>Pharmacy</option><option>Laboratory</option><option>Diagnostics</option></select></div>
+   <div class="field"><label>Consultant / provider</label><input id="consultant" placeholder="Doctor / department"></div>
+   <div class="field"><label>Mobile number</label><input id="billMobile" readonly></div>
+   <div class="field"><label>Payment status</label><select id="payStatus"><option value="Paid">Paid in full</option><option value="Partial">Part payment</option><option value="Unpaid">Unpaid / credit</option></select></div>
+  </div>
+  <div class="toolbar" style="margin-top:8px"><h3>Bill items</h3><button class="secondary" id="addItem">＋ Add item</button></div>
+  <div class="itemrow small muted" style="font-weight:700"><span>Description / service</span><span>Qty</span><span>Rate (₹)</span><span></span></div>
+  <div id="billItems"></div>
+  <div class="formgrid" style="margin-top:12px">
+   <div class="field"><label>Discount (₹)</label><input type="number" id="discount" min="0" value="0"></div>
+   <div class="field"><label>Tax (%) – configure per service</label><input type="number" id="taxRate" min="0" max="100" value="0"></div>
+   <div class="field"><label>Amount received (₹)</label><input type="number" id="received" min="0" value="0"></div>
+   <div class="field"><label>Payment method</label><select id="paymentMethod"><option>UPI</option><option>Cash</option><option>Card</option><option>Bank transfer</option><option>Insurance / TPA</option><option>Credit</option></select></div>
+   <div class="field wide"><label>Notes</label><input id="billNotes" placeholder="Optional notes"></div>
+  </div>
+ </div>
+ <div class="panel">
+  <h3>Bill summary</h3><div class="totalrow"><span class="muted">Subtotal</span><b id="subtotal">₹0.00</b></div><div class="totalrow"><span class="muted">Discount</span><b id="discountView">₹0.00</b></div><div class="totalrow"><span class="muted">Tax</span><b id="taxView">₹0.00</b></div><div class="totalrow grand"><span>Total</span><span id="grandTotal">₹0.00</span></div><div class="totalrow"><span class="muted">Received</span><b id="receivedView">₹0.00</b></div><div class="totalrow"><span class="muted">Balance due</span><b id="balanceView">₹0.00</b></div>
+  <div class="notice" style="margin-top:15px">Bill number is generated on save. Each branch has its own bill sequence in this demo.</div>
+  <button class="teal" style="width:100%;margin-top:10px" id="saveBill">Save bill & generate receipt</button><button class="secondary" style="width:100%;margin-top:8px" id="clearBill">Clear form</button>
+ </div></div>
+</section>
+<section id="page-patients" class="hidden">
+ <div class="pagehead"><div><h1>Patients</h1><p>Patient master register for the active branch.</p></div><button onclick="openPatientForm()">＋ Add patient</button></div>
+ <div class="panel"><div class="toolbar"><input id="patientSearch" placeholder="Search name, patient ID or mobile…"><span class="small muted" id="patientCount"></span></div><div id="patientTable"></div></div>
+ <div class="panel hidden" id="patientFormPanel" style="margin-top:15px"><h3>Register patient</h3><div class="formgrid"><div class="field"><label>Full name *</label><input id="pName"></div><div class="field"><label>Mobile *</label><input id="pMobile" inputmode="numeric"></div><div class="field"><label>Age</label><input id="pAge" type="number" min="0"></div><div class="field"><label>Gender</label><select id="pGender"><option>Not specified</option><option>Female</option><option>Male</option><option>Other</option></select></div><div class="field wide"><label>Address</label><input id="pAddress"></div></div><div class="actions"><button id="savePatient">Save patient</button><button class="secondary" onclick="document.getElementById('patientFormPanel').classList.add('hidden')">Cancel</button></div></div>
+</section>
+<section id="page-bills" class="hidden">
+ <div class="pagehead"><div><h1>Bill register</h1><p>Search, review and print transactions for the active branch.</p></div><button onclick="showPage('billing')">＋ New bill</button></div>
+ <div class="panel"><div class="toolbar"><input id="billSearch" placeholder="Search bill number or patient…"><select id="billFilter"><option value="">All payment statuses</option><option>Paid</option><option>Partial</option><option>Unpaid</option></select></div><div id="billTable"></div></div>
+</section>
+<section id="page-services" class="hidden">
+ <div class="pagehead"><div><h1>Services & rates</h1><p>Demo price catalogue. Edit or add services for billing.</p></div><button onclick="addService()">＋ Add service</button></div>
+ <div class="panel"><div class="notice">Rates shown are illustrative only and are not official ILVORA tariffs. Configure branch-specific rates and tax treatment before production use.</div><div id="serviceTable"></div></div>
+</section>
+<section id="page-branches" class="hidden">
+ <div class="pagehead"><div><h1>Branch management</h1><p>Hybrid structure: central oversight with branch-level operations.</p></div><span class="pill">Hybrid mode</span></div>
+ <div class="cards"><div class="card"><div class="muted small">Registered branches</div><div class="metric">3</div></div><div class="card"><div class="muted small">Billing sequence</div><div class="metric">Per branch</div></div><div class="card"><div class="muted small">Head office view</div><div class="metric">Consolidated</div></div><div class="card"><div class="muted small">Branch control</div><div class="metric">Local</div></div></div>
+ <div class="panel"><h3>Branch directory</h3><div id="branchTable"></div></div>
+</section>
+<section id="page-reports" class="hidden">
+ <div class="pagehead"><div><h1>Reports & reconciliation</h1><p>Collections, outstanding balances and payment mix.</p></div><button class="secondary" onclick="window.print()">Print report</button></div>
+ <div class="cards"><div class="card"><div class="muted small">Gross billed</div><div class="metric" id="rGross">₹0</div></div><div class="card"><div class="muted small">Collected</div><div class="metric" id="rPaid">₹0</div></div><div class="card"><div class="muted small">Outstanding</div><div class="metric" id="rOutstanding">₹0</div></div><div class="card"><div class="muted small">Discounts</div><div class="metric" id="rDiscount">₹0</div></div></div>
+ <div class="panel"><h3>Branch collection summary</h3><div id="branchReport"></div><div class="footnote">Reports are calculated from records stored in this browser. No cloud sync or accounting ledger is connected.</div></div>
+</section>
+<section id="page-users" class="hidden">
+ <div class="pagehead"><div><h1>Users & role permissions</h1><p>Role-based access demonstration.</p></div></div>
+ <div class="notice">Use the role selector in the top bar to preview permissions. This is a UI demonstration only; production access control must be enforced by a secure server, not by browser-side code.</div>
+ <div class="panel"><h3>Prototype data tools</h3><p class="small muted">Back up or clear the sample records stored only in this browser. These tools do not connect to a shared database.</p><div class="actions"><button class="secondary" onclick="exportDemoData()">Export demo backup (JSON)</button><button class="danger" onclick="clearDemoData()">Clear local demo data</button></div></div>
+ <div class="panel"><h3>Role permission matrix</h3><div style="overflow:auto"><table><thead><tr><th>Capability</th><th>Head Office Admin</th><th>Branch Admin</th><th>Billing Staff</th><th>Auditor</th></tr></thead><tbody>
+ <tr><td>View consolidated branches</td><td>✓</td><td>—</td><td>—</td><td>✓</td></tr><tr><td>Manage branch users</td><td>✓</td><td>Own branch</td><td>—</td><td>—</td></tr><tr><td>Create / edit patient</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr><tr><td>Create bills / receive payment</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr><tr><td>Approve discounts / refunds</td><td>✓</td><td>Own branch</td><td>—</td><td>—</td></tr><tr><td>View financial reports</td><td>✓</td><td>Own branch</td><td>Limited</td><td>✓</td></tr><tr><td>Configure rates</td><td>✓</td><td>Own branch request</td><td>—</td><td>—</td></tr></tbody></table></div></div>
+</section>
+<section id="page-receipt" class="hidden"><div class="pagehead no-print"><div><h1>Receipt preview</h1><p>Print-ready patient receipt.</p></div><div class="actions"><button class="secondary" onclick="showPage('bills')">Back to bills</button><button onclick="window.print()">Print / Save PDF</button></div></div><div id="receiptArea"></div></section>
+</div></main></div>
+<script>
+const branches=['Kochi Head Office','ILVORA Health Clinic – Kottarakkara','Neelambari Hospital – Thamarakulam'];
+const rates=[
+ ['OPD consultation','OPD',200],['Emergency consultation','Emergency',300],['Registration fee','OPD',50],['ECG','Diagnostics',150],['Dressing','Emergency',120],['Suturing','Emergency',250],['Observation bed – first 2 hours','Emergency',300],['Observation bed – additional hour','Emergency',75],['CBC','Laboratory',250],['Blood sugar','Laboratory',50],['Urine routine','Laboratory',100],['Nebulisation','Emergency',100],['IPD bed charge – per day','IPD',1000],['Pharmacy item','Pharmacy',0]
+];
+let patients=[
+ {id:'ILV-P0001',name:'Anita Raj',mobile:'9876543210',age:34,gender:'Female',address:'Kochi'},
+ {id:'ILV-P0002',name:'Thomas Mathew',mobile:'9895012345',age:58,gender:'Male',address:'Kottarakkara'},
+ {id:'ILV-P0003',name:'Meera Suresh',mobile:'9747012345',age:27,gender:'Female',address:'Thamarakulam'}
+];
+let bills=[],currentReceipt=null;
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const branch=()=>document.getElementById('branchSelect').value;
+const role=()=>document.getElementById('roleSelect').value;
+function showPage(name){document.querySelectorAll('[id^="page-"]').forEach(x=>x.classList.add('hidden'));document.getElementById('page-'+name).classList.remove('hidden');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));document.getElementById('topTitle').textContent=({dashboard:'Dashboard',billing:'New bill',patients:'Patients',bills:'Bill register',services:'Services & rates',branches:'Branches',reports:'Reports',users:'Users & roles',receipt:'Receipt preview'})[name]||name;document.getElementById('sidebar').classList.remove('open');renderAll();}
+document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.getElementById('menuBtn').onclick=()=>document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('branchSelect').onchange=()=>{renderAll();};
+document.getElementById('roleSelect').onchange=()=>applyRole();
+function applyRole(){let r=role();let branchSel=document.getElementById('branchSelect');branchSel.disabled=(r==='Branch Admin'||r==='Billing Staff');if(branchSel.disabled&&branch()==='Kochi Head Office')branchSel.value=branches[1];renderAll();}
+function scopedBills(){return bills.filter(b=>b.branch===branch())}
+function renderAll(){renderDashboard();renderPatients();renderBills();renderServices();renderBranches();renderReports();populatePatientSelect();}
+function renderDashboard(){let bs=scopedBills(),paid=bs.reduce((s,b)=>s+b.received,0),due=bs.reduce((s,b)=>s+b.balance,0);document.getElementById('dashCollection').textContent=money(paid);document.getElementById('dashBills').textContent=bs.length;document.getElementById('dashDue').textContent=money(due);document.getElementById('dashPatients').textContent=patients.length;document.getElementById('recentBills').innerHTML=bs.length?tableBills(bs.slice(-5).reverse()):'<div class="empty">No bills yet. Create your first bill.</div>';}
+function renderPatients(){let q=(document.getElementById('patientSearch')?.value||'').toLowerCase();let arr=patients.filter(p=>(p.name+p.id+p.mobile).toLowerCase().includes(q));document.getElementById('patientCount').textContent=arr.length+' patients';document.getElementById('patientTable').innerHTML=arr.length?`<div style="overflow:auto"><table><thead><tr><th>Patient ID</th><th>Name</th><th>Mobile</th><th>Age / Gender</th><th>Action</th></tr></thead><tbody>${arr.map(p=>`<tr><td>${p.id}</td><td><b>${esc(p.name)}</b></td><td>${esc(p.mobile)}</td><td>${p.age||'—'} / ${esc(p.gender)}</td><td><button class="secondary" onclick="selectPatient('${p.id}')">Bill patient</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No patients found.</div>';}
+function openPatientForm(){document.getElementById('patientFormPanel').classList.remove('hidden');}
+document.getElementById('savePatient').onclick=()=>{let name=document.getElementById('pName').value.trim(),mobile=document.getElementById('pMobile').value.trim();if(!name||!mobile){alert('Enter patient name and mobile number.');return}let p={id:'ILV-P'+String(patients.length+1).padStart(4,'0'),name,mobile,age:document.getElementById('pAge').value,gender:document.getElementById('pGender').value,address:document.getElementById('pAddress').value};patients.push(p);['pName','pMobile','pAge','pAddress'].forEach(id=>document.getElementById(id).value='');document.getElementById('patientFormPanel').classList.add('hidden');renderAll();};
+document.getElementById('patientSearch').oninput=renderPatients;
+function populatePatientSelect(){let s=document.getElementById('billPatient'),old=s.value;s.innerHTML=patients.map(p=>`<option value="${p.id}">${esc(p.name)} (${p.id})</option>`).join('');if(old&&patients.some(p=>p.id===old))s.value=old;updatePatientFields();}
+function updatePatientFields(){let p=patients.find(p=>p.id===document.getElementById('billPatient').value);document.getElementById('billPatientId').value=p?.id||'';document.getElementById('billMobile').value=p?.mobile||'';}
+document.getElementById('billPatient').onchange=updatePatientFields;
+function selectPatient(id){showPage('billing');document.getElementById('billPatient').value=id;updatePatientFields();}
+function addItem(desc='',qty=1,rate=0){let div=document.createElement('div');div.className='itemrow';div.innerHTML=`<input class="item-desc" list="serviceOptions" placeholder="Service / item" value="${esc(desc)}"><input class="item-qty" type="number" min="1" value="${qty}"><input class="item-rate" type="number" min="0" step=".01" value="${rate}"><button class="danger remove-item" title="Remove">×</button>`;document.getElementById('billItems').appendChild(div);div.querySelectorAll('input').forEach(x=>x.addEventListener('input',calculate));div.querySelector('.item-desc').addEventListener('change',e=>{let r=rates.find(x=>x[0].toLowerCase()===e.target.value.toLowerCase());if(r){div.querySelector('.item-rate').value=r[2];calculate();}});div.querySelector('.remove-item').onclick=()=>{div.remove();calculate();};calculate();}
+function serviceOptions(){let old=document.getElementById('serviceOptions');if(old)old.remove();let dl=document.createElement('datalist');dl.id='serviceOptions';dl.innerHTML=rates.map(r=>`<option value="${esc(r[0])}">`).join('');document.body.appendChild(dl);}
+function getTotals(){let sub=[...document.querySelectorAll('#billItems .itemrow')].reduce((s,r)=>s+Math.max(0,+r.querySelector('.item-qty').value||0)*Math.max(0,+r.querySelector('.item-rate').value||0),0);let disc=Math.min(sub,Math.max(0,+document.getElementById('discount').value||0));let taxable=sub-disc,tax=taxable*Math.max(0,+document.getElementById('taxRate').value||0)/100,total=taxable+tax,received=Math.min(total,Math.max(0,+document.getElementById('received').value||0));return{sub,disc,tax,total,received,balance:total-received};}
+function calculate(){let t=getTotals();document.getElementById('subtotal').textContent=money(t.sub);document.getElementById('discountView').textContent=money(t.disc);document.getElementById('taxView').textContent=money(t.tax);document.getElementById('grandTotal').textContent=money(t.total);document.getElementById('receivedView').textContent=money(t.received);document.getElementById('balanceView').textContent=money(t.balance);let st=document.getElementById('payStatus');if(t.balance===0)st.value='Paid';else if(t.received>0)st.value='Partial';else st.value='Unpaid';}
+document.getElementById('addItem').onclick=()=>addItem();['discount','taxRate','received'].forEach(id=>document.getElementById(id).addEventListener('input',calculate));
+document.getElementById('clearBill').onclick=()=>{document.getElementById('billItems').innerHTML='';addItem();document.getElementById('discount').value=0;document.getElementById('taxRate').value=0;document.getElementById('received').value=0;document.getElementById('consultant').value='';document.getElementById('billNotes').value='';calculate();};
+function makeBillNo(){let code=branches.indexOf(branch())+1;let count=bills.filter(b=>b.branch===branch()).length+1;return `ILV-${String(code).padStart(2,'0')}-${new Date().getFullYear()}-${String(count).padStart(5,'0')}`;}
+document.getElementById('saveBill').onclick=()=>{if(!['Head Office Admin','Branch Admin','Billing Staff'].includes(role())){alert('Your role cannot create bills.');return}let p=patients.find(p=>p.id===document.getElementById('billPatient').value);let items=[...document.querySelectorAll('#billItems .itemrow')].map(r=>({description:r.querySelector('.item-desc').value.trim(),qty:+r.querySelector('.item-qty').value||0,rate:+r.querySelector('.item-rate').value||0})).filter(i=>i.description&&i.qty>0);if(!p||!items.length){alert('Select a patient and add at least one valid bill item.');return}let t=getTotals();if(t.total<=0){alert('Bill total must be greater than zero.');return}if(+document.getElementById('received').value>t.total){alert('Received amount cannot exceed total.');return}let b={id:makeBillNo(),branch:branch(),patient:p,department:document.getElementById('department').value,consultant:document.getElementById('consultant').value,items,...t,status:t.balance===0?'Paid':t.received>0?'Partial':'Unpaid',method:document.getElementById('paymentMethod').value,notes:document.getElementById('billNotes').value,date:new Date().toLocaleString('en-IN')};bills.push(b);currentReceipt=b;renderAll();showReceipt(b);};
+function tableBills(arr){return `<div style="overflow:auto"><table><thead><tr><th>Bill no.</th><th>Patient</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody>${arr.map(b=>`<tr><td><b>${b.id}</b><div class="small muted">${b.date}</div></td><td>${esc(b.patient.name)}</td><td>${money(b.total)}</td><td><span class="pill ${b.status==='Paid'?'':b.status==='Partial'?'pending':'cancel'}">${b.status}</span></td><td><button class="secondary" onclick="openBill('${b.id}')">View</button></td></tr>`).join('')}</tbody></table></div>`;}
+function renderBills(){let q=(document.getElementById('billSearch')?.value||'').toLowerCase(),f=document.getElementById('billFilter')?.value||'';let arr=scopedBills().filter(b=>(b.id+b.patient.name+b.patient.id).toLowerCase().includes(q)&&(!f||b.status===f)).reverse();document.getElementById('billTable').innerHTML=arr.length?tableBills(arr):'<div class="empty">No matching bills.</div>';}
+document.getElementById('billSearch').oninput=renderBills;document.getElementById('billFilter').onchange=renderBills;
+function openBill(id){let b=bills.find(x=>x.id===id);if(b)showReceipt(b);}
+function showReceipt(b){currentReceipt=b;document.getElementById('receiptArea').innerHTML=`<div class="receipt"><div class="receipthead"><h2>ILVORA</h2><b>HEALTHCARE GROUP</b><div class="small">WHERE CARE BECOMES CONFIDENCE.</div><div style="margin-top:8px;font-weight:700">PAYMENT RECEIPT</div></div><div class="receiptmeta"><div><b>Bill No:</b> ${b.id}</div><div><b>Date:</b> ${esc(b.date)}</div><div><b>Branch:</b> ${esc(b.branch)}</div><div><b>Department:</b> ${esc(b.department)}</div><div><b>Patient:</b> ${esc(b.patient.name)}</div><div><b>Patient ID:</b> ${b.patient.id}</div><div><b>Mobile:</b> ${esc(b.patient.mobile)}</div><div><b>Consultant:</b> ${esc(b.consultant||'—')}</div></div><table><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th class="rightalign">Amount</th></tr></thead><tbody>${b.items.map(i=>`<tr><td>${esc(i.description)}</td><td>${i.qty}</td><td>${money(i.rate)}</td><td class="rightalign">${money(i.qty*i.rate)}</td></tr>`).join('')}</tbody></table><div class="totals" style="margin-top:15px"><div class="totalrow"><span>Subtotal</span><b>${money(b.sub)}</b></div><div class="totalrow"><span>Discount</span><b>${money(b.disc)}</b></div><div class="totalrow"><span>Tax</span><b>${money(b.tax)}</b></div><div class="totalrow grand"><span>Grand total</span><span>${money(b.total)}</span></div><div class="totalrow"><span>Received (${esc(b.method)})</span><b>${money(b.received)}</b></div><div class="totalrow"><span>Balance due</span><b>${money(b.balance)}</b></div></div><div style="margin-top:18px"><b>Payment status:</b> ${b.status}</div><div class="footnote">${esc(b.notes||'')}<br><br>This is a computer-generated prototype receipt. Please retain it for your records.</div><div style="text-align:center;margin-top:28px;font-size:12px">Thank you for choosing ILVORA Healthcare.</div></div>`;showPage('receipt');}
+function renderServices(){document.getElementById('serviceTable').innerHTML=`<div style="overflow:auto"><table><thead><tr><th>Service / item</th><th>Department</th><th>Demo rate</th><th></th></tr></thead><tbody>${rates.map((r,i)=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${money(r[2])}</td><td><button class="secondary" onclick="editService(${i})">Edit</button></td></tr>`).join('')}</tbody></table></div>`;}
+function editService(i){let v=prompt('Enter new demo rate (₹):',rates[i][2]);if(v!==null&&v.trim()!==''&&Number.isFinite(+v)&&+v>=0){rates[i][2]=+v;renderServices();}}
+function addService(){let n=prompt('Service name:');if(!n)return;let d=prompt('Department (OPD / IPD / Emergency / Pharmacy / Laboratory / Diagnostics):','OPD')||'OPD';let r=prompt('Demo rate (₹):','0');if(r!==null&&Number.isFinite(+r)&&+r>=0){rates.push([n,d,+r]);renderServices();}}
+function renderBranches(){document.getElementById('branchTable').innerHTML=`<table><thead><tr><th>Branch</th><th>Branch code</th><th>Billing sequence</th><th>Operating model</th></tr></thead><tbody>${branches.map((b,i)=>`<tr><td><b>${b}</b></td><td>ILV-${String(i+1).padStart(2,'0')}</td><td>Branch-specific</td><td>${i===0?'Central administration':'Local operations + central oversight'}</td></tr>`).join('')}</tbody></table>`;}
+function renderReports(){let all=branch()==='Kochi Head Office'&&role()==='Head Office Admin'?bills:scopedBills();let gross=all.reduce((s,b)=>s+b.total,0),paid=all.reduce((s,b)=>s+b.received,0),due=all.reduce((s,b)=>s+b.balance,0),disc=all.reduce((s,b)=>s+b.disc,0);document.getElementById('rGross').textContent=money(gross);document.getElementById('rPaid').textContent=money(paid);document.getElementById('rOutstanding').textContent=money(due);document.getElementById('rDiscount').textContent=money(disc);document.getElementById('branchReport').innerHTML=`<table><thead><tr><th>Branch</th><th>Bills</th><th>Gross billed</th><th>Collected</th><th>Due</th></tr></thead><tbody>${branches.map(br=>{let a=bills.filter(b=>b.branch===br);return `<tr><td>${br}</td><td>${a.length}</td><td>${money(a.reduce((s,b)=>s+b.total,0))}</td><td>${money(a.reduce((s,b)=>s+b.received,0))}</td><td>${money(a.reduce((s,b)=>s+b.balance,0))}</td></tr>`}).join('')}</tbody></table>`;}
+// Local demo persistence: data stays in this browser only (not a secure cloud database).
+const STORAGE_KEY='ilvora_billing_demo_v1';
+try {
+ const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+ if(saved){
+  if(Array.isArray(saved.patients)) patients=saved.patients;
+  if(Array.isArray(saved.bills)) bills=saved.bills;
+  if(Array.isArray(saved.rates)&&saved.rates.length) rates.splice(0,rates.length,...saved.rates);
+ }
+} catch(e) { console.warn('Could not load demo data',e); }
+function saveDemoData(){
+ try { localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,bills,rates,savedAt:new Date().toISOString()})); }
+ catch(e){ console.warn('Could not save demo data',e); alert('Browser storage is full. Export or clear demo data.'); }
+}
+const originalRenderAll=renderAll;
+renderAll=function(){originalRenderAll();saveDemoData();};
+const originalRenderServices=renderServices;
+renderServices=function(){originalRenderServices();saveDemoData();};
+function exportDemoData(){
+ const blob=new Blob([JSON.stringify({patients,bills,rates},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ilvora-billing-demo-backup.json';a.click();URL.revokeObjectURL(a.href);
+}
+function clearDemoData(){
+ if(!confirm('Clear all locally saved prototype patients and bills? This cannot be undone.'))return;
+ patients=[];bills=[];localStorage.removeItem(STORAGE_KEY);renderAll();alert('Local prototype data cleared.');
+}
+serviceOptions();addItem('OPD consultation',1,200);renderAll();applyRole();
+
+</script>
+</body></html>
